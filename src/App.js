@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 import TestComponent from './components/TestComponent.js';
+import Map from './components/Map.js';
 import appReducer from './reducer.js';
 
 export const AppContext = React.createContext();
@@ -30,6 +31,7 @@ function App() {
 	return (
 		<AppContext.Provider value={{ state, dispatch }}>
 			<TestComponent />
+			<Map />
 			<header className="App-header">
 				<h2 style={headerStyle}> color: {state.color} </h2>
 				<br />
