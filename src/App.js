@@ -1,24 +1,34 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
 import TestComponent from './components/TestComponent.js';
 import appReducer from './reducer.js';
 
 export const AppContext = React.createContext();
 
 function App() {
-	const initialState = { color: 'red' };
+	const initialState = { color: 'turquoise' };
 	const [state, dispatch] = useReducer(appReducer, initialState);
+
+	const didRun = useRef(false);
+
+	useEffect(() => {
+		if (!didRun.current) {
+			const rawData = localStorage.getItem('data');
+			dispatch({ type: 'RETRIEVE_FROM_LOCAL', payload: JSON.parse(rawData) });
+			didRun.current = true;
+		}
+	});
+
+	useEffect(() => {
+		localStorage.setItem('data', JSON.stringify(state));
+	}, [state]);
 
 	const headerStyle = {
 		color: state.color,
 		fontFamily: 'Helvetica',
 	};
 
-	useEffect(() => {
-		console.log('did it!"');
-	}, [state.color]);
-
 	return (
-		<AppContext.Provider className="App" value={{ state, dispatch }}>
+		<AppContext.Provider value={{ state, dispatch }}>
 			<TestComponent />
 			<header className="App-header">
 				<h2 style={headerStyle}> color: {state.color} </h2>
@@ -26,7 +36,7 @@ function App() {
 				<br />
 				<button
 					onClick={() => {
-						dispatch({ type: 'colorSwitch', payload: state.color });
+						dispatch({ type: 'COLOR_SWITCH', payload: state.color });
 					}}
 				>
 					Clicky

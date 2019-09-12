@@ -10,10 +10,10 @@ function TestComponent() {
 
 	return (
 		<div style={whatStyle}>
-			<h4>hey</h4>
+			<h4>{JSON.stringify({ ...state })}</h4>
 			<button
 				onClick={() => {
-					dispatch({ type: 'colorSwitch', payload: state.color });
+					dispatch({ type: 'COLOR_SWITCH', payload: state.color });
 				}}
 			></button>
 		</div>
